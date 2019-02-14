@@ -20,7 +20,7 @@ class LinkedList
         virtual unsigned int getSize() const;
         virtual bool add(T);
         virtual T get(unsigned int);
-        virtual bool remove(unsigned int);
+        virtual T remove(unsigned int);
         virtual void clear();
         virtual void printAll();
 
@@ -79,7 +79,10 @@ void LinkedList<T>::printAll()
 template <class T>
 void LinkedList<T>::clear()
 {
-
+    for(unsigned int i = 0; i < this->_size; i++)
+    {
+        this->remove(i);
+    }
 }
 
 template <class T>
@@ -91,26 +94,63 @@ unsigned int LinkedList<T>::getSize() const
 template <class T>
 T LinkedList<T>::get(unsigned int pos)
 {
-    unsigned int temp = 0;
-    shared_ptr<Node<T> > current = root;
-
-    while(temp < pos && current != nullptr)
+    if(pos < _size)
     {
-        current = current->getNext();
-        temp++;
-    }
+        unsigned int cont = 0;
+        shared_ptr<Node<T> > current = root;
 
-    if(current != nullptr){
-        return current->getData();
+        while(cont < pos && current != nullptr)
+        {
+            current = current->getNext();
+            cont++;
+        }
+
+        if(cont == pos)
+        {
+            return current->getData();
+        }
     }
 
     throw;
 }
 
 template <class T>
-bool LinkedList<T>::remove(unsigned int pos)
+T LinkedList<T>::remove(unsigned int pos)
 {
-    return false;
+
+    if(pos == 0)
+    {
+        root = root->getNext();
+        _size--;
+    }
+    else
+    {
+        if(pos < _size)
+        {
+            unsigned int cont = 0;
+            shared_ptr<Node<T> > current = root;
+
+            while(cont < (pos -1) && current != nullptr)
+            {
+                current = current->getNext();
+                cont++;
+            }
+
+            if(cont == (pos -1))
+            {
+                T temp = current->getNext()->getData();
+
+                current->setNext(current->getNext()->getNext());
+
+                _size--;
+
+                return temp;
+            }
+        }
+
+        throw;
+    }
+
 }
 
 #endif // LINKEDLIST_H

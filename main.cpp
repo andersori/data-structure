@@ -18,7 +18,9 @@ int main()
     lis.add(6);
 
     //lis.printAll();
-    cout << lis.get(6) << endl;
+    //cout << lis.get(6) << endl;
+    lis.remove(7);
+    lis.printAll();
 
     return 0;
 }
