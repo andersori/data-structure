@@ -151,6 +151,7 @@ bool LinkedListDB<T>::remove(unsigned int pos)
         prev->setNext(next);
         next->setPrev(prev);
 
+        _size--;
         return true;
     }
 
