@@ -14,9 +14,9 @@ class Node
 
 
         T getData() const;
-        void setData(T);
-
         shared_ptr<Node<T> > getNext() const;
+
+        void setData(T);
         void setNext(shared_ptr<Node<T> >);
 
     protected:

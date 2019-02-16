@@ -1,6 +1,7 @@
 #include <iostream>
 #include "include/Node.h"
 #include "include/LinkedList.h"
+#include "include/LinkedListDB.h"
 
 using namespace std;
 
@@ -8,19 +9,21 @@ int main()
 {
     cout << "Hello world!" << endl;
 
-    LinkedList<int> lis;
+    LinkedListDB<int> lis;
 
-    lis.add(1);
-    lis.add(2);
-    lis.add(3);
-    lis.add(4);
-    lis.add(5);
-    lis.add(6);
+    lis.push_back(1);
+    lis.push_back(2);
+    lis.push_back(4);
+    lis.push_front(28);
+
+    lis.push(2, 312);
 
     //lis.printAll();
     //cout << lis.get(6) << endl;
-    lis.remove(7);
+    //lis.remove(7);
     lis.printAll();
+
+    //cout << " mekd " << lis.get(4) << endl;
 
     return 0;
 }

@@ -17,8 +17,8 @@ class LinkedList
         LinkedList();
         virtual ~LinkedList();
 
-        virtual unsigned int getSize() const;
-        virtual bool add(T);
+        unsigned int getSize() const;
+        virtual bool push(T);
         virtual T get(unsigned int);
         virtual T remove(unsigned int);
         virtual void clear();
@@ -45,7 +45,7 @@ LinkedList<T>::~LinkedList()
 }
 
 template <class T>
-bool LinkedList<T>::add(T data)
+bool LinkedList<T>::push(T data)
 {
     shared_ptr<Node<T> > newNode = make_shared<Node<T> >();
     newNode->setData(data);
@@ -150,7 +150,7 @@ T LinkedList<T>::remove(unsigned int pos)
 
         throw;
     }
-
+    return false;
 }
 
 #endif // LINKEDLIST_H
