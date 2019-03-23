@@ -2,11 +2,13 @@
 #include "include/Node.h"
 #include "include/LinkedList.h"
 #include "include/LinkedListDB.h"
+#include "include/Hash.h"
 
 using namespace std;
 
 int main()
 {
+    /*
     cout << "Hello world!" << endl;
 
     LinkedListDB<int> lis;
@@ -24,6 +26,9 @@ int main()
     lis.printAll();
 
     //cout << " mekd " << lis.get(4) << endl;
+    */
+
+    Hash<int, int> ha(10);
 
     return 0;
 }
