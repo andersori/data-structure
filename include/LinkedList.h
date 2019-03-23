@@ -1,156 +1,142 @@
-#ifndef LINKEDLIST_H
-#define LINKEDLIST_H
+#ifndef LinkedList_h
+#define LinkedList_h
 
-#include "Node.h"
 #include <memory>
-#include <iostream>
+#include "ListNode.h"
 
 using std::shared_ptr;
 using std::make_shared;
-using std::cout;
-using std::endl;
 
-template <class T>
+template<class T>
 class LinkedList
 {
-    public:
-        LinkedList();
-        virtual ~LinkedList();
+	private:
+		unsigned int size;
+		shared_ptr<ListNode<T> > root;
+		shared_ptr<ListNode<T> > last;
 
-        unsigned int getSize() const;
-        virtual bool push(T);
-        virtual T get(unsigned int);
-        virtual T remove(unsigned int);
-        virtual void clear();
-        virtual void printAll();
+		shared_ptr<ListNode<T> > getNode(unsigned int);
 
-    protected:
-        unsigned int _size;
-        shared_ptr<Node<T> > root;
-        shared_ptr<Node<T> > last;
+	public:
+		LinkedList();
+		~LinkedList();
+
+		unsigned int getSize();
+		T get(unsigned int);
+		T remove(unsigned int);
+		void push(T);
 };
 
-template <class T>
+template<class T>
 LinkedList<T>::LinkedList()
 {
-    this->_size = 0;
-    this->root = nullptr;
-    this->last = nullptr;
+	this->size = 0;
+	this->root = nullptr;
+	this->last = nullptr;
 }
 
-template <class T>
+template<class T>
 LinkedList<T>::~LinkedList()
 {
-    clear();
+	shared_ptr<ListNode<T> > temp;
+	while(root != nullptr)
+	{
+		temp = root;
+		root = root->next;
+		temp = nullptr;
+	}
+
+	this->size = 0;
 }
 
-template <class T>
-bool LinkedList<T>::push(T data)
+template<class T>
+unsigned int LinkedList<T>::getSize()
 {
-    shared_ptr<Node<T> > newNode = make_shared<Node<T> >();
-    newNode->setData(data);
-
-    if(root == nullptr)
-    {
-        root = newNode;
-        last = root;
-    }
-    else
-    {
-        last->setNext(newNode);
-        last = newNode;
-    }
-
-    this->_size++;
-    return true;
+	return this->size;
 }
 
-template <class T>
-void LinkedList<T>::printAll()
-{
-    shared_ptr<Node<T> > temp = root;
-    while(temp != nullptr)
-    {
-        cout << temp->getData() << endl;
-        temp = temp->getNext();
-    }
-}
-
-template <class T>
-void LinkedList<T>::clear()
-{
-    for(unsigned int i = 0; i < this->_size; i++)
-    {
-        this->remove(i);
-    }
-}
-
-template <class T>
-unsigned int LinkedList<T>::getSize() const
-{
-    return _size;
-}
-
-template <class T>
+template<class T>
 T LinkedList<T>::get(unsigned int pos)
 {
-    if(pos < _size)
-    {
-        unsigned int cont = 0;
-        shared_ptr<Node<T> > current = root;
-
-        while(cont < pos && current != nullptr)
-        {
-            current = current->getNext();
-            cont++;
-        }
-
-        if(cont == pos)
-        {
-            return current->getData();
-        }
-    }
-
-    throw;
+	shared_ptr<ListNode<T> > result = this->getNode(pos);
+	if(result != nullptr)
+	{
+		return result->data;
+	}
+	else
+	{
+		throw;
+	}
 }
 
-template <class T>
+template<class T>
 T LinkedList<T>::remove(unsigned int pos)
 {
 
     if(pos == 0)
     {
-        root = root->getNext();
-        _size--;
+        T data = this->root->data;
+        this->root = this->root->next;
+
+        this->size--;
+        return data;
     }
     else
     {
-        if(pos < _size)
+        shared_ptr<ListNode<T> > previous = this->getNode(pos-1);
+        shared_ptr<ListNode<T> > removed = previous->next;
+
+        if(previous != nullptr)
         {
-            unsigned int cont = 0;
-            shared_ptr<Node<T> > current = root;
+            T data = removed->data;
+            previous->next = removed->next;
 
-            while(cont < (pos -1) && current != nullptr)
-            {
-                current = current->getNext();
-                cont++;
-            }
-
-            if(cont == (pos -1))
-            {
-                T temp = current->getNext()->getData();
-
-                current->setNext(current->getNext()->getNext());
-
-                _size--;
-
-                return temp;
-            }
+            this->size--;
+            return data;
         }
-
-        throw;
+        else
+        {
+            throw;
+        }
     }
-    return false;
 }
 
-#endif // LINKEDLIST_H
+template<class T>
+void LinkedList<T>::push(T data)
+{
+	shared_ptr<ListNode<T> > newNode = make_shared<ListNode<T> >();
+	newNode->data = data;
+
+	if(this->root == nullptr)
+	{
+		root = newNode;
+
+		last = root;
+	}
+	else
+	{
+		last->next = newNode;
+		last = newNode;
+	}
+
+	this->size++;
+}
+
+template<class T>
+shared_ptr<ListNode<T> > LinkedList<T>::getNode(unsigned int pos)
+{
+	shared_ptr<ListNode<T> > temp = this->root;
+
+	for(unsigned int i = 0; i < this->getSize(); i++)
+	{
+		if(i == pos)
+		{
+			return temp;
+		}
+		temp = temp->next;
+	}
+
+	return nullptr;
+}
+
+#endif
