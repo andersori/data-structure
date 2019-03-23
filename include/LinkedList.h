@@ -2,7 +2,7 @@
 #define LinkedList_h
 
 #include <memory>
-#include "ListNode.h"
+#include "LinkedNode.h"
 
 using std::shared_ptr;
 using std::make_shared;
@@ -12,10 +12,10 @@ class LinkedList
 {
 	private:
 		unsigned int size;
-		shared_ptr<ListNode<T> > root;
-		shared_ptr<ListNode<T> > last;
+		shared_ptr<LinkedNode<T> > root;
+		shared_ptr<LinkedNode<T> > last;
 
-		shared_ptr<ListNode<T> > getNode(unsigned int);
+		shared_ptr<LinkedNode<T> > getNode(unsigned int);
 
 	public:
 		LinkedList();
@@ -38,7 +38,7 @@ LinkedList<T>::LinkedList()
 template<class T>
 LinkedList<T>::~LinkedList()
 {
-	shared_ptr<ListNode<T> > temp;
+	shared_ptr<LinkedNode<T> > temp;
 	while(root != nullptr)
 	{
 		temp = root;
@@ -58,7 +58,7 @@ unsigned int LinkedList<T>::getSize()
 template<class T>
 T LinkedList<T>::get(unsigned int pos)
 {
-	shared_ptr<ListNode<T> > result = this->getNode(pos);
+	shared_ptr<LinkedNode<T> > result = this->getNode(pos);
 	if(result != nullptr)
 	{
 		return result->data;
@@ -83,8 +83,8 @@ T LinkedList<T>::remove(unsigned int pos)
     }
     else
     {
-        shared_ptr<ListNode<T> > previous = this->getNode(pos-1);
-        shared_ptr<ListNode<T> > removed = previous->next;
+        shared_ptr<LinkedNode<T> > previous = this->getNode(pos-1);
+        shared_ptr<LinkedNode<T> > removed = previous->next;
 
         if(previous != nullptr)
         {
@@ -104,7 +104,7 @@ T LinkedList<T>::remove(unsigned int pos)
 template<class T>
 void LinkedList<T>::push(T data)
 {
-	shared_ptr<ListNode<T> > newNode = make_shared<ListNode<T> >();
+	shared_ptr<LinkedNode<T> > newNode = make_shared<LinkedNode<T> >();
 	newNode->data = data;
 
 	if(this->root == nullptr)
@@ -123,9 +123,9 @@ void LinkedList<T>::push(T data)
 }
 
 template<class T>
-shared_ptr<ListNode<T> > LinkedList<T>::getNode(unsigned int pos)
+shared_ptr<LinkedNode<T> > LinkedList<T>::getNode(unsigned int pos)
 {
-	shared_ptr<ListNode<T> > temp = this->root;
+	shared_ptr<LinkedNode<T> > temp = this->root;
 
 	for(unsigned int i = 0; i < this->getSize(); i++)
 	{

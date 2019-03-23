@@ -10,12 +10,9 @@ int main()
     lst.push(2);
     lst.push(3);
 
-    cout << lst.getSize() << endl;
+    cout << "Tamanho: " << lst.getSize() << endl;
 
-    lst.remove(0);
-
-    cout << lst.getSize() << " ----  "<< endl << endl;
-
+	cout << "--Itens--" << endl;
     cout << lst.get(0) << endl;
     cout << lst.get(1) << endl;
     cout << lst.get(2) << endl;
