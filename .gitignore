@@ -1,5 +1,2 @@
-/bin
-/obj
-data-structure.cbp
-data-structure.layout
-data-structure.depend
+/bin/*
+/obj/*
