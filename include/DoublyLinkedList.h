@@ -2,6 +2,7 @@
 #define DoublyLinkedList_h
 
 #include <memory>
+#include <iostream>
 #include "DoublyNode.h"
 
 using std::shared_ptr;
@@ -73,7 +74,32 @@ T DoublyLinkedList<T>::get(int pos)
 template<class T>
 T DoublyLinkedList<T>::remove(int pos)
 {
+	shared_ptr<DoublyNode<T> > result = this->getNode(pos);
+	if(result != nullptr)
+	{
+		T data = result->data;
+		shared_ptr<DoublyNode<T> > next = result->next;
+		shared_ptr<DoublyNode<T> > prev = result->prev;
 
+		if(next != nullptr)
+		{
+			next->prev = prev;
+		}
+		if(prev != nullptr)
+		{
+			prev->next = next;
+		}
+		
+		result = nullptr;
+
+		this->size--;
+
+		return data;
+	}
+	else
+	{
+		throw;
+	}
 }
 
 template<class T>
@@ -89,7 +115,7 @@ void DoublyLinkedList<T>::push(T data)
 	}
 	else
 	{
-		newNode->prev = last->prev;
+		newNode->prev = last;
 		this->last->next = newNode;
 		this->last = newNode;
 	}
@@ -99,7 +125,7 @@ void DoublyLinkedList<T>::push(T data)
 template<class T>
 shared_ptr<DoublyNode<T> > DoublyLinkedList<T>::getNode(int pos)
 {
-	if(pos > 0 && pos < this->size)
+	if(pos >= 0 && pos < this->size)
 	{
 		shared_ptr<DoublyNode<T> > current = this->root;
 		for(int i = 0; i != pos; i++)
