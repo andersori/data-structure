@@ -11,19 +11,19 @@ template<class T>
 class LinkedList
 {
 	private:
-		unsigned int size;
+		int size;
 		shared_ptr<LinkedNode<T> > root;
 		shared_ptr<LinkedNode<T> > last;
 
-		shared_ptr<LinkedNode<T> > getNode(unsigned int);
+		shared_ptr<LinkedNode<T> > getNode(int);
 
 	public:
 		LinkedList();
 		~LinkedList();
 
-		unsigned int getSize();
-		T get(unsigned int);
-		T remove(unsigned int);
+		int getSize();
+		T get(int);
+		T remove(int);
 		void push(T);
 };
 
@@ -46,17 +46,18 @@ LinkedList<T>::~LinkedList()
 		temp = nullptr;
 	}
 
+	this->last = nullptr;
 	this->size = 0;
 }
 
 template<class T>
-unsigned int LinkedList<T>::getSize()
+int LinkedList<T>::getSize()
 {
 	return this->size;
 }
 
 template<class T>
-T LinkedList<T>::get(unsigned int pos)
+T LinkedList<T>::get(int pos)
 {
 	shared_ptr<LinkedNode<T> > result = this->getNode(pos);
 	if(result != nullptr)
@@ -70,7 +71,7 @@ T LinkedList<T>::get(unsigned int pos)
 }
 
 template<class T>
-T LinkedList<T>::remove(unsigned int pos)
+T LinkedList<T>::remove(int pos)
 {
 
     if(pos == 0)
@@ -123,11 +124,11 @@ void LinkedList<T>::push(T data)
 }
 
 template<class T>
-shared_ptr<LinkedNode<T> > LinkedList<T>::getNode(unsigned int pos)
+shared_ptr<LinkedNode<T> > LinkedList<T>::getNode(int pos)
 {
 	shared_ptr<LinkedNode<T> > temp = this->root;
 
-	for(unsigned int i = 0; i < this->getSize(); i++)
+	for(int i = 0; i < this->getSize(); i++)
 	{
 		if(i == pos)
 		{
