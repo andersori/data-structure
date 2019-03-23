@@ -1,4 +1,4 @@
 # Data Structure
 
-[Scripts](/script)
-[Code](/include)
+- [Scripts](/script)
+- [Code](/include)
