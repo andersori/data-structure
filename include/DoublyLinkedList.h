@@ -13,8 +13,8 @@ class DoublyLinkedList
 {
 	private:
 		int size;
-		shared_ptr<DoublyNode<T> > root;//DoublyNode<T>* root; 'Almost the same thing'
-		shared_ptr<DoublyNode<T> > last;//DoublyNode<T>* last; 'Almost the same thing'
+		shared_ptr<DoublyNode<T> > root;
+		shared_ptr<DoublyNode<T> > last;
 
 		shared_ptr<DoublyNode<T> > getNode(int);
 
