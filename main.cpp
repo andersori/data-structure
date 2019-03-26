@@ -1,34 +1,33 @@
 #include <iostream>
-#include "include/Node.h"
 #include "include/LinkedList.h"
-#include "include/LinkedListDB.h"
-#include "include/Hash.h"
+#include "include/Stack.h"
 
 using namespace std;
 
 int main()
 {
-    /*
-    cout << "Hello world!" << endl;
+    LinkedList<Stack<int> > lst_sta;
+    
+    for(int i = 0; i < 5; i++)
+    {
+        Stack<int> st;
+        for(int j = 0; j < 10; j++)
+        {
+            st.push((i+1)*j);
+        }
+        lst_sta.push(st);
+    }
 
-    LinkedListDB<int> lis;
 
-    lis.push_back(1);
-    lis.push_back(2);
-    lis.push_back(4);
-    lis.push_front(28);
-
-    lis.push(2, 312);
-
-    //lis.printAll();
-    //cout << lis.get(6) << endl;
-    //lis.remove(7);
-    lis.printAll();
-
-    //cout << " mekd " << lis.get(4) << endl;
-    */
-
-    Hash<int, int> ha(10);
+    for(int i = 0; i < lst_sta.size(); i++)
+    {
+        Stack<int> temp = lst_sta.remove(0);
+        for(int j = 0; j < 10; j++)
+        {
+            cout << lst_sta.pop();
+        }
+        cout << endl;
+    }
 
     return 0;
 }
