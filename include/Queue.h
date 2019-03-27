@@ -11,25 +11,32 @@ using std::make_shared;
 template<class T>
 class Queue
 {
-	private:
-		int _size;
-		shared_ptr<LinkedNode<T> > first;
-		shared_ptr<LinkedNode<T> > last;
+	private://only typedef's
+		typedef shared_ptr<LinkedNode<T> > pointer_node;
+		typedef const T& const_reference;
+		typedef T& reference;
 
 	public:
+		typedef unsigned int size_type;
+
 		Queue();
 		~Queue();
 
-		int size();
-		void push(const T&);
+		size_type size() const;
+		void push(const_reference);
 
-		T& front();
-		const T& front() const;
+		reference front();
+		const_reference front() const;
 
-		T& back();
-		const T& back() const;
+		reference back();
+		const_reference back() const;
 		
-		T pop();
+		T pop();//Return a copy of the removed element
+
+	private:
+		size_type _size;
+		pointer_node first;
+		pointer_node last;
 };
 
 template<class T>
@@ -43,22 +50,22 @@ Queue<T>::Queue()
 template<class T>
 Queue<T>::~Queue()
 {
-	while(this->_size != 0)
+	while(this->size() != 0)
 	{
 		this->pop();
 	}
 }
 
 template<class T>
-int Queue<T>::size()
+typename Queue<T>::size_type Queue<T>::size() const
 {
 	return this->_size;
 }
 
 template<class T>
-void Queue<T>::push(const T& data)
+void Queue<T>::push(const_reference data)
 {
-	shared_ptr<LinkedNode<T> > newNode = make_shared<LinkedNode<T> >();
+	pointer_node newNode = make_shared<LinkedNode<T> >();
 	newNode->data = data;
 
 	if(this->first == nullptr)
@@ -75,25 +82,25 @@ void Queue<T>::push(const T& data)
 }
 
 template<class T>
-T& Queue<T>::front()
+typename Queue<T>::reference Queue<T>::front()
 {
 	return this->first->data;
 }
 
 template<class T>
-const T& Queue<T>::front() const
+typename Queue<T>::const_reference Queue<T>::front() const
 {
 	return this->first->data;
 }
 
 template<class T>
-T& Queue<T>::back()
+typename Queue<T>::reference Queue<T>::back()
 {
 	return this->last->data;
 }
 
 template<class T>
-const T& Queue<T>::back() const
+typename Queue<T>::const_reference Queue<T>::back() const
 {
 	return this->last->data;
 }
@@ -104,7 +111,7 @@ T Queue<T>::pop()
 	T temp = this->first->data;
 	if(this->_size != 0)
 	{
-		shared_ptr<LinkedNode<T> > next = this->first->next;
+		pointer_node next = this->first->next;
 		this->first = next;
 		this->_size--;
 		return temp;

@@ -2,7 +2,6 @@
 #define DoublyLinkedList_h
 
 #include <memory>
-#include <iostream>
 #include "DoublyNode.h"
 
 using std::shared_ptr;
@@ -11,27 +10,37 @@ using std::make_shared;
 template<class T>
 class DoublyLinkedList
 {
-	private:
-		int size;
-		shared_ptr<DoublyNode<T> > root;
-		shared_ptr<DoublyNode<T> > last;
-
-		shared_ptr<DoublyNode<T> > getNode(int);
+	private://only typedef's
+		typedef shared_ptr<DoublyNode<T> > pointer_node;
+		typedef const T& const_reference;
+		typedef T& reference;
 
 	public:
+		typedef unsigned int size_type;
+
 		DoublyLinkedList();
 		~DoublyLinkedList();
 
-		int getSize();
-		T get(int);
-		T remove(int);
-		void push(T);
+		size_type size() const;
+		
+		reference get(size_type);
+		const_reference get(size_type) const;
+
+		T remove(size_type);
+		void push(const_reference);
+
+	private:
+		size_type _size;
+		pointer_node root;
+		pointer_node last;
+
+		pointer_node getNode(size_type);
 };
 
 template<class T>
 DoublyLinkedList<T>::DoublyLinkedList()
 {
-	this->size = 0;
+	this->_size = 0;
 	this->root = nullptr;
 	this->last = nullptr;
 }
@@ -39,28 +48,22 @@ DoublyLinkedList<T>::DoublyLinkedList()
 template<class T>
 DoublyLinkedList<T>::~DoublyLinkedList()
 {
-	shared_ptr<DoublyNode<T> > temp = root;
-	while(root != nullptr)
+	while(this->size() != 0)
 	{
-		root = temp->next;
-		temp = root;
+		this->remove(0);
 	}
-
-	temp = nullptr;
-	this->last = nullptr;
-	this->size = 0;
 }
 
 template<class T>
-int DoublyLinkedList<T>::getSize()
+typename DoublyLinkedList<T>::size_type DoublyLinkedList<T>::size() const
 {
-	return this->size;
+	return this->_size;
 }
 
 template<class T>
-T DoublyLinkedList<T>::get(int pos)
+typename DoublyLinkedList<T>::reference DoublyLinkedList<T>::get(size_type pos)
 {
-	shared_ptr<DoublyNode<T> > result = this->getNode(pos);
+	pointer_node result = this->getNode(pos);
 	if(result != nullptr)
 	{
 		return result->data;
@@ -72,14 +75,28 @@ T DoublyLinkedList<T>::get(int pos)
 }
 
 template<class T>
-T DoublyLinkedList<T>::remove(int pos)
+typename DoublyLinkedList<T>::const_reference DoublyLinkedList<T>::get(size_type pos) const
 {
-	shared_ptr<DoublyNode<T> > result = this->getNode(pos);
+	pointer_node result = this->getNode(pos);
+	if(result != nullptr)
+	{
+		return result->data;
+	}
+	else
+	{
+		throw;
+	}
+}
+
+template<class T>
+T DoublyLinkedList<T>::remove(size_type pos)
+{
+	pointer_node result = this->getNode(pos);
 	if(result != nullptr)
 	{
 		T data = result->data;
-		shared_ptr<DoublyNode<T> > next = result->next;
-		shared_ptr<DoublyNode<T> > prev = result->prev;
+		pointer_node next = result->next;
+		pointer_node prev = result->prev;
 
 		if(next != nullptr)
 		{
@@ -92,7 +109,7 @@ T DoublyLinkedList<T>::remove(int pos)
 		
 		result = nullptr;
 
-		this->size--;
+		this->_size--;
 
 		return data;
 	}
@@ -103,9 +120,9 @@ T DoublyLinkedList<T>::remove(int pos)
 }
 
 template<class T>
-void DoublyLinkedList<T>::push(T data)
+void DoublyLinkedList<T>::push(const_reference data)
 {
-	shared_ptr<DoublyNode<T> > newNode = make_shared<DoublyNode<T> >();
+	pointer_node newNode = make_shared<DoublyNode<T> >();
 	newNode->data = data;
 
 	if(this->root == nullptr)
@@ -119,16 +136,16 @@ void DoublyLinkedList<T>::push(T data)
 		this->last->next = newNode;
 		this->last = newNode;
 	}
-	this->size++;
+	this->_size++;
 }
 
 template<class T>
-shared_ptr<DoublyNode<T> > DoublyLinkedList<T>::getNode(int pos)
+typename DoublyLinkedList<T>::pointer_node DoublyLinkedList<T>::getNode(size_type pos)
 {
-	if(pos >= 0 && pos < this->size)
+	if(pos < this->size())
 	{
-		shared_ptr<DoublyNode<T> > current = this->root;
-		for(int i = 0; i != pos; i++)
+		pointer_node current = this->root;
+		for(size_type i = 0; i != pos; i++)
 		{
 			current = current->next;
 		}

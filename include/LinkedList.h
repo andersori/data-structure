@@ -10,27 +10,37 @@ using std::make_shared;
 template<class T>
 class LinkedList
 {
-	private:
-		int size;
-		shared_ptr<LinkedNode<T> > root;
-		shared_ptr<LinkedNode<T> > last;
-
-		shared_ptr<LinkedNode<T> > getNode(int);
+	private://only typedef's
+		typedef shared_ptr<LinkedNode<T> > pointer_node;
+		typedef const T& const_reference;
+		typedef T& reference;
 
 	public:
+		typedef unsigned int size_type;
+
 		LinkedList();
 		~LinkedList();
 
-		int getSize();
-		T get(int);
-		T remove(int);
-		void push(T);
+		size_type size() const;
+		
+		reference get(size_type);
+		const_reference get(size_type) const;
+
+		T remove(size_type);//Return a copy of the removed element
+		void push(const_reference);
+
+	private:
+		size_type _size;
+		pointer_node root;
+		pointer_node last;
+
+		pointer_node get_node(size_type);
 };
 
 template<class T>
 LinkedList<T>::LinkedList()
 {
-	this->size = 0;
+	this->_size = 0;
 	this->root = nullptr;
 	this->last = nullptr;
 }
@@ -38,28 +48,23 @@ LinkedList<T>::LinkedList()
 template<class T>
 LinkedList<T>::~LinkedList()
 {
-	shared_ptr<LinkedNode<T> > temp;
-	while(root != nullptr)
+	while(this->size() != 0)
 	{
-		temp = root;
-		root = root->next;
-		temp = nullptr;
+		this->remove(0);
 	}
-
-	this->last = nullptr;
-	this->size = 0;
 }
 
 template<class T>
-int LinkedList<T>::getSize()
+typename LinkedList<T>::size_type LinkedList<T>::size() const
 {
-	return this->size;
+	return this->_size;
 }
 
 template<class T>
-T LinkedList<T>::get(int pos)
+typename LinkedList<T>::reference LinkedList<T>::get(size_type pos)
 {
-	shared_ptr<LinkedNode<T> > result = this->getNode(pos);
+	pointer_node result = this->get_node(pos);
+
 	if(result != nullptr)
 	{
 		return result->data;
@@ -71,7 +76,22 @@ T LinkedList<T>::get(int pos)
 }
 
 template<class T>
-T LinkedList<T>::remove(int pos)
+typename LinkedList<T>::const_reference LinkedList<T>::get(size_type pos) const
+{
+	pointer_node result = this->get_node(pos);
+
+	if(result != nullptr)
+	{
+		return result->data;
+	}
+	else
+	{
+		throw;
+	}
+}
+
+template<class T>
+T LinkedList<T>::remove(size_type pos)
 {
 
     if(pos == 0)
@@ -79,20 +99,20 @@ T LinkedList<T>::remove(int pos)
         T data = this->root->data;
         this->root = this->root->next;
 
-        this->size--;
+        this->_size--;
         return data;
     }
     else
     {
-        shared_ptr<LinkedNode<T> > previous = this->getNode(pos-1);
-        shared_ptr<LinkedNode<T> > removed = previous->next;
+        pointer_node previous = this->get_node(pos-1);
+        pointer_node removed = previous->next;
 
         if(previous != nullptr)
         {
             T data = removed->data;
             previous->next = removed->next;
 
-            this->size--;
+            this->_size--;
             return data;
         }
         else
@@ -103,9 +123,9 @@ T LinkedList<T>::remove(int pos)
 }
 
 template<class T>
-void LinkedList<T>::push(T data)
+void LinkedList<T>::push(const_reference data)
 {
-	shared_ptr<LinkedNode<T> > newNode = make_shared<LinkedNode<T> >();
+	pointer_node newNode = make_shared<LinkedNode<T> >();
 	newNode->data = data;
 
 	if(this->root == nullptr)
@@ -120,21 +140,24 @@ void LinkedList<T>::push(T data)
 		last = newNode;
 	}
 
-	this->size++;
+	this->_size++;
 }
 
 template<class T>
-shared_ptr<LinkedNode<T> > LinkedList<T>::getNode(int pos)
+typename LinkedList<T>::pointer_node LinkedList<T>::get_node(size_type pos)
 {
-	shared_ptr<LinkedNode<T> > temp = this->root;
-
-	for(int i = 0; i < this->getSize(); i++)
+	if(pos < this->size())
 	{
-		if(i == pos)
+		pointer_node temp = this->root;
+
+		for(size_type i = 0; i < this->size(); i++)
 		{
-			return temp;
+			if(i == pos)
+			{
+				return temp;
+			}
+			temp = temp->next;
 		}
-		temp = temp->next;
 	}
 
 	return nullptr;

@@ -3,6 +3,8 @@
 
 using namespace std;
 
+typedef typename DoublyLinkedList<int>::size_type size_type;
+
 int main()
 {
 	DoublyLinkedList<int> lst;
@@ -24,10 +26,10 @@ int main()
 	cout << "Removido: " << lst.remove(7) << endl;
 
 
-	cout << "Size: " << lst.getSize() << endl;
+	cout << "Size: " << lst.size() << endl;
 
 	cout << "--Itens--" << endl;
-	for(int i = 0; i < lst.getSize(); i++)
+	for(size_type i = 0; i < lst.size(); i++)
 	{
 		cout << lst.get(i) << endl;
 	}
