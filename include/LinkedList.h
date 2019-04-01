@@ -105,10 +105,11 @@ T LinkedList<T>::remove(size_type pos)
     else
     {
         pointer_node previous = this->get_node(pos-1);
-        pointer_node removed = previous->next;
 
         if(previous != nullptr)
         {
+        	pointer_node removed = previous->next;
+        	
             T data = removed->data;
             previous->next = removed->next;
 
